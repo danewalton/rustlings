@@ -35,10 +35,27 @@ impl Default for Person {
 // If while parsing the age, something goes wrong, then return the default of Person
 // Otherwise, then return an instantiated Person object with the results
 
-// I AM NOT DONE
-
 impl From<&str> for Person {
     fn from(s: &str) -> Person {
+      if s.len() == 0 { Person::default() }
+      else {
+          let mut vec: Vec<&str> = s.split(',').collect();
+          
+          if vec.len() != 2 { return Person::default() };
+
+          let mut parsed_age = vec.pop();
+          println!("{}", parsed_age.unwrap());
+          let age_as_usize = usize::from_str_radix(parsed_age.unwrap(), 10);
+
+          if age_as_usize.is_err() { println!("hello"); return Person::default() }
+
+          let mut parsed_name = vec.pop();
+          if parsed_name.is_none() { return Person::default() }
+          if parsed_name.unwrap().len() == 0 { return Person::default() }
+
+
+          Person {name: parsed_name.unwrap().into(), age: age_as_usize.unwrap().into() }
+      }
     }
 }
 
